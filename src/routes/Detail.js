@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Nav } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from 'styled-components'
+import { addItem } from './../store/cartSlice.js';
+import Cart from './Cart.js'
 
 let Box = styled.div`
   padding : 20px;
@@ -16,6 +19,7 @@ let YellowBtn = styled.button`
 function Detail(props) {
     let { id } = useParams();
     let item = props.shoes.find((x) => x.id === parseInt(id));
+    let dispatch = useDispatch();
 
     let [alert, setAlert] = useState(true);
     let [num, setNum] = useState('');
@@ -60,7 +64,7 @@ function Detail(props) {
                     <h4 className="pt-5">{item.title}</h4>
                     <p>{item.content}</p>
                     <p>{item.price}</p>
-                    <button className="btn btn-danger">주문하기</button> 
+                    <button className="btn btn-danger" onClick={() => dispatch(addItem(item))}>주문하기</button> 
                 </div>
             </div>
             <Nav variant="tabs"  defaultActiveKey="link0">
@@ -90,7 +94,7 @@ function TabContent({tab}){
 
     return (
       <div className={'start ' + fade}>
-        { [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tab] }
+        { [<div><Cart /></div>, <div>내용1</div>, <div>내용2</div>][tab] }
       </div>  
     ) 
 }
