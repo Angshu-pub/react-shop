@@ -8,22 +8,34 @@ import { Routes, Route, useNavigate, Outlet } from 'react-router-dom'
 
 import Detail from './routes/Detail.js'
 import Cart from './routes/Cart.js'
-import { moreData } from './store/dataSlice.js';
+import { addData } from './store/dataSlice.js';
+import axios from 'axios';
 
 function App() {
   let dispatch = useDispatch()
+  let navigate = useNavigate();
 
   let [ count, setCount ] = useState(0);
-  let navigate = useNavigate();
 
   useEffect(() => {
 
   }, [count]);
 
+  function moreData() {
+    let url = 'https://codingapple1.github.io/shop/data2.json';
+    if(count > 0) {
+      url = 'https://codingapple1.github.io/shop/data3.json';
+    }
+    
+    axios.get(url).then((res) => {
+      dispatch(addData(res.data));
+    }).catch(() => console.log('실패'));
+  }
+
   return (
     <div className="App">
       
-      <NavHome navigate={navigate}/>
+      <NavHome />
 
       <Routes>
         <Route path='/' element={
@@ -35,7 +47,7 @@ function App() {
               {
                 count < 2 ?
                 <button onClick={() => {
-                  dispatch(moreData(count));
+                  moreData();
                   setCount(count+1);
                 }}>More</button>
                 : null
@@ -70,6 +82,7 @@ function NavHome(){
         <Nav.Link href="/event">Event</Nav.Link>
         <Nav.Link href="/cart">Cart</Nav.Link>
       </Nav>
+      <Nav className="ms-auto">반가워요 Kim</Nav>
       </Container>
     </Navbar>
   )
