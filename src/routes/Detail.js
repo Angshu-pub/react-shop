@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Nav } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from 'styled-components'
 import { addItem } from './../store/cartSlice.js';
@@ -17,9 +17,11 @@ let YellowBtn = styled.button`
 `;
 
 function Detail(props) {
-    let { id } = useParams();
-    let item = props.shoes.find((x) => x.id === parseInt(id));
     let dispatch = useDispatch();
+    let shoes = useSelector((state) => state.data);
+
+    let { id } = useParams();
+    let item = shoes.find((x) => x.id === parseInt(id));
 
     let [alert, setAlert] = useState(true);
     let [num, setNum] = useState('');

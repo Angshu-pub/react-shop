@@ -1,37 +1,24 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Navbar, Container, Nav } from 'react-bootstrap'
 import { Routes, Route, useNavigate, Outlet } from 'react-router-dom'
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 
-import data from './data.js'
 import Detail from './routes/Detail.js'
 import Cart from './routes/Cart.js'
+import { moreData } from './store/dataSlice.js';
 
 function App() {
+  let dispatch = useDispatch()
 
-  let [ shoes, setShoes ] = useState(data);
   let [ count, setCount ] = useState(0);
   let navigate = useNavigate();
-  
-  useEffect(() => {
-    
-  }, [count]);
 
-  function moreData() {
-    //console.log(count);
-    let url = 'https://codingapple1.github.io/shop/data2.json';
-    if(count > 0) {
-      url = 'https://codingapple1.github.io/shop/data3.json';
-    }
-    axios.get(url).then((res) => {
-      let copy = [...shoes];
-      copy = [...shoes, ...res.data];
-      setShoes(copy);
-    }).catch(() => console.log('실패'));
-  }
+  useEffect(() => {
+
+  }, [count]);
 
   return (
     <div className="App">
@@ -44,11 +31,11 @@ function App() {
           <div className="main-bg"></div>
           <div className="container">
             <div className="row">
-              <Card shoes={shoes} navigate={navigate}/>
+              <Card navigate={navigate}/>
               {
                 count < 2 ?
                 <button onClick={() => {
-                  moreData();
+                  dispatch(moreData(count));
                   setCount(count+1);
                 }}>More</button>
                 : null
@@ -57,7 +44,7 @@ function App() {
           </div>
           </>
         } />
-        <Route path='/detail/:id' element={<Detail shoes={shoes} />} />
+        <Route path='/detail/:id' element={<Detail />} />
         <Route path='/about' element={<About />} >
           <Route path='member' element={<div>멤버들</div>} />
           <Route path='location' element={<div>회사위치</div>} />
@@ -107,8 +94,10 @@ function Event(){
 }
 
 function Card(props) {
+  let shoes = useSelector((state) => state.data);
+
   return (
-    props.shoes.map((item, idx) => {
+    shoes.map((item, idx) => {
       return (
       <div className="col-md-4" key={item.id} onClick={() => props.navigate('/detail/' + item.id)}>
         <img src={'https://codingapple1.github.io/shop/shoes'+ (idx + 1) +'.jpg'} width="80%" alt={item.title}/>
