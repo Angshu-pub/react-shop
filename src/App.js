@@ -1,24 +1,20 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navbar, Container, Nav } from 'react-bootstrap'
 import { Routes, Route, useNavigate, Outlet } from 'react-router-dom'
 
 import Detail from './routes/Detail.js'
 import Cart from './routes/Cart.js'
-import { moreData } from './store/dataSlice.js';
+import DataService from './Services/dataService';
 
 function App() {
   let dispatch = useDispatch()
 
   let [ count, setCount ] = useState(0);
   let navigate = useNavigate();
-
-  useEffect(() => {
-
-  }, [count]);
 
   return (
     <div className="App">
@@ -35,7 +31,7 @@ function App() {
               {
                 count < 2 ?
                 <button onClick={() => {
-                  dispatch(moreData(count));
+                  dispatch(DataService.getShoesList(count));
                   setCount(count+1);
                 }}>More</button>
                 : null
@@ -94,12 +90,12 @@ function Event(){
 }
 
 function Card(props) {
-  let shoes = useSelector((state) => state.data);
+  const shoes = useSelector((state) => state.data);
 
   return (
-    shoes.map((item, idx) => {
+    shoes?.map((item, idx) => {
       return (
-      <div className="col-md-4" key={item.id} onClick={() => props.navigate('/detail/' + item.id)}>
+      <div className="col-md-4" key={item.id + idx} onClick={() => props.navigate('/detail/' + item.id)}>
         <img src={'https://codingapple1.github.io/shop/shoes'+ (idx + 1) +'.jpg'} width="80%" alt={item.title}/>
         <h4>{item.title}</h4>
         <p>{item.price}</p>
