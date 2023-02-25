@@ -12,14 +12,14 @@ import DataService from './Services/dataService';
 
 function App() {
   let dispatch = useDispatch()
+  let navigate = useNavigate();
 
   let [ count, setCount ] = useState(0);
-  let navigate = useNavigate();
 
   return (
     <div className="App">
       
-      <NavHome navigate={navigate}/>
+      <NavHome />
 
       <Routes>
         <Route path='/' element={
@@ -66,6 +66,7 @@ function NavHome(){
         <Nav.Link href="/event">Event</Nav.Link>
         <Nav.Link href="/cart">Cart</Nav.Link>
       </Nav>
+      <Nav className="ms-auto">반가워요 Kim</Nav>
       </Container>
     </Navbar>
   )
