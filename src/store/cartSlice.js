@@ -18,7 +18,7 @@ let cart = createSlice({
             if(num > -1) {
                 state[num].count++;
             } else {
-                let objTemp = {id : obj.payload.id, name : obj.payload.title, count : 0};
+                let objTemp = {id : obj.payload.id, name : obj.payload.title, count : 1};
                 state.push(objTemp);
             }
         },
